@@ -69,3 +69,4 @@ How It Works / Start Here / Rules → put them in a Wiki page or the Workspace p
 Workflow states, approvals, print formats, dashboards with charts, Gantt views. Every one of these is a Parking Lot item
 until the Board has run for a quarter. The spec above is the whole thing.
 # dieture_board
+# dieture_board

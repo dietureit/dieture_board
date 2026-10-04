@@ -1,0 +1,28 @@
+{
+ "doctype": "Report",
+ "name": "The Board",
+ "report_name": "The Board",
+ "report_type": "Script Report",
+ "ref_doctype": "Bet",
+ "module": "Dieture Board",
+ "is_standard": "Yes",
+ "disabled": 0,
+ "owner": "Administrator",
+ "roles": [
+  {
+   "role": "Chief of Staff"
+  },
+  {
+   "role": "Board Owner"
+  },
+  {
+   "role": "Board Viewer"
+  },
+  {
+   "role": "Board Manager"
+  },
+  {
+   "role": "System Manager"
+  }
+ ]
+}

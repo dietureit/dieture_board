@@ -1,0 +1,172 @@
+{
+ "doctype": "Workspace",
+ "name": "Dieture Board",
+ "title": "Dieture Board",
+ "label": "Dieture Board",
+ "module": "Dieture Board",
+ "public": 1,
+ "is_hidden": 0,
+ "icon": "target",
+ "sequence_id": 1,
+ "content": "[{\"id\": \"h1\", \"type\": \"header\", \"data\": {\"text\": \"<span class='h4'><b>Dieture Board</b></span>\", \"col\": 12}}, {\"id\": \"p1\", \"type\": \"paragraph\", \"data\": {\"text\": \"Three scores; seven ranked bets, each written backwards from THEN WHAT to WHAT. Every bet starts with a tiny test of its SO WHAT; every piece of work is a promise with a name, a date and an agreed definition of done. The system turns things RED by itself. Thursday: owners update. Sunday: Chief of Staff reviews RED rows.\", \"col\": 12}}, {\"id\": \"s1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"The Board\", \"col\": 4}}, {\"id\": \"s2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"My promises\", \"col\": 4}}, {\"id\": \"s3\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"New Bet\", \"col\": 4}}, {\"id\": \"c1\", \"type\": \"card\", \"data\": {\"card_name\": \"Everyone\", \"col\": 4}}, {\"id\": \"c2\", \"type\": \"card\", \"data\": {\"card_name\": \"Chief of Staff and bet owners\", \"col\": 4}}, {\"id\": \"c3\", \"type\": \"card\", \"data\": {\"card_name\": \"Managers only\", \"col\": 4}}]",
+ "links": [
+  {
+   "label": "Everyone",
+   "type": "Card Break",
+   "hidden": 0,
+   "onboard": 0,
+   "link_count": 5
+  },
+  {
+   "label": "The Board",
+   "link_type": "Report",
+   "link_to": "The Board",
+   "type": "Link",
+   "hidden": 0,
+   "is_query_report": 1,
+   "onboard": 0
+  },
+  {
+   "label": "Scorecard",
+   "link_type": "Report",
+   "link_to": "Scorecard",
+   "type": "Link",
+   "hidden": 0,
+   "is_query_report": 1,
+   "onboard": 0
+  },
+  {
+   "label": "Bets",
+   "link_type": "DocType",
+   "link_to": "Bet",
+   "type": "Link",
+   "hidden": 0,
+   "is_query_report": 0,
+   "onboard": 0
+  },
+  {
+   "label": "Promises",
+   "link_type": "DocType",
+   "link_to": "Promise",
+   "type": "Link",
+   "hidden": 0,
+   "is_query_report": 0,
+   "onboard": 0
+  },
+  {
+   "label": "Departments",
+   "link_type": "Report",
+   "link_to": "Departments",
+   "type": "Link",
+   "hidden": 0,
+   "is_query_report": 1,
+   "onboard": 0
+  },
+  {
+   "label": "Chief of Staff and bet owners",
+   "type": "Card Break",
+   "hidden": 0,
+   "onboard": 0,
+   "link_count": 5
+  },
+  {
+   "label": "Problem Briefs",
+   "link_type": "DocType",
+   "link_to": "Problem Brief",
+   "type": "Link",
+   "hidden": 0,
+   "is_query_report": 0,
+   "onboard": 0
+  },
+  {
+   "label": "Future Bets",
+   "link_type": "DocType",
+   "link_to": "Future Bet",
+   "type": "Link",
+   "hidden": 0,
+   "is_query_report": 0,
+   "onboard": 0
+  },
+  {
+   "label": "Parking Lot",
+   "link_type": "DocType",
+   "link_to": "Parking Lot Item",
+   "type": "Link",
+   "hidden": 0,
+   "is_query_report": 0,
+   "onboard": 0
+  },
+  {
+   "label": "Standing Numbers",
+   "link_type": "DocType",
+   "link_to": "Standing Number",
+   "type": "Link",
+   "hidden": 0,
+   "is_query_report": 0,
+   "onboard": 0
+  },
+  {
+   "label": "Exit Reason Split",
+   "link_type": "Report",
+   "link_to": "Exit Reason Split",
+   "type": "Link",
+   "hidden": 0,
+   "is_query_report": 1,
+   "onboard": 0
+  },
+  {
+   "label": "Managers only",
+   "type": "Card Break",
+   "hidden": 0,
+   "onboard": 0,
+   "link_count": 2
+  },
+  {
+   "label": "People",
+   "link_type": "Report",
+   "link_to": "People",
+   "type": "Link",
+   "hidden": 0,
+   "is_query_report": 1,
+   "onboard": 0
+  },
+  {
+   "label": "Board Settings",
+   "link_type": "DocType",
+   "link_to": "Board Settings",
+   "type": "Link",
+   "hidden": 0,
+   "is_query_report": 0,
+   "onboard": 0
+  }
+ ],
+ "shortcuts": [
+  {
+   "label": "The Board",
+   "type": "Report",
+   "link_to": "The Board",
+   "color": "Green",
+   "doc_view": ""
+  },
+  {
+   "label": "My promises",
+   "type": "DocType",
+   "link_to": "Promise",
+   "color": "Orange",
+   "doc_view": "List",
+   "stats_filter": "{\"maker\": [\"=\", \"__user\"], \"accepted\": 0}"
+  },
+  {
+   "label": "New Bet",
+   "type": "DocType",
+   "link_to": "Bet",
+   "color": "Blue",
+   "doc_view": "New"
+  }
+ ],
+ "charts": [],
+ "number_cards": [],
+ "quick_lists": [],
+ "custom_blocks": [],
+ "roles": []
+}

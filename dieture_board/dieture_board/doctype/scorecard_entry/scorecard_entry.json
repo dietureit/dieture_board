@@ -1,0 +1,117 @@
+{
+ "doctype": "DocType",
+ "name": "Scorecard Entry",
+ "module": "Dieture Board",
+ "custom": 0,
+ "istable": 0,
+ "issingle": 0,
+ "editable_grid": 1,
+ "track_changes": 1,
+ "engine": "InnoDB",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "creation": "2026-10-03 00:00:00",
+ "modified": "2026-10-03 00:00:00",
+ "idx": 0,
+ "fields": [
+  {
+   "fieldname": "score",
+   "fieldtype": "Select",
+   "label": "Score",
+   "options": "Acquisition\nRetention\nMargin",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "definition",
+   "fieldtype": "Small Text",
+   "label": "What it means in plain words"
+  },
+  {
+   "fieldname": "how_measured",
+   "fieldtype": "Small Text",
+   "label": "How we measure it"
+  },
+  {
+   "fieldname": "c1",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "baseline",
+   "fieldtype": "Data",
+   "label": "Baseline",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "current",
+   "fieldtype": "Data",
+   "label": "Number now",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "target",
+   "fieldtype": "Data",
+   "label": "Number we want",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "target_date",
+   "fieldtype": "Date",
+   "label": "By when"
+  }
+ ],
+ "field_order": [
+  "score",
+  "definition",
+  "how_measured",
+  "c1",
+  "baseline",
+  "current",
+  "target",
+  "target_date"
+ ],
+ "permissions": [
+  {
+   "role": "Chief of Staff",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "report": 1,
+   "share": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Board Owner",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "export": 1,
+   "report": 1,
+   "email": 1
+  },
+  {
+   "role": "Board Viewer",
+   "read": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "report": 1,
+   "share": 1,
+   "print": 1,
+   "email": 1
+  }
+ ],
+ "autoname": "field:score"
+}

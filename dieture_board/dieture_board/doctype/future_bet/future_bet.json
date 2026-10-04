@@ -1,0 +1,129 @@
+{
+ "doctype": "DocType",
+ "name": "Future Bet",
+ "module": "Dieture Board",
+ "custom": 0,
+ "istable": 0,
+ "issingle": 0,
+ "editable_grid": 1,
+ "track_changes": 1,
+ "engine": "InnoDB",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "creation": "2026-10-03 00:00:00",
+ "modified": "2026-10-03 00:00:00",
+ "idx": 0,
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Future bet (one line, with the number it would move)",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "unlocked_by",
+   "fieldtype": "Link",
+   "label": "Unlocked by Bet",
+   "options": "Bet",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "unlocking_bet_name",
+   "fieldtype": "Data",
+   "label": "Unlocking bet",
+   "fetch_from": "unlocked_by.short_name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "unlocking_status",
+   "fieldtype": "Data",
+   "label": "Unlocking bet status",
+   "fetch_from": "unlocked_by.effective_status",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "c0",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "score",
+   "fieldtype": "Select",
+   "label": "Score it would push",
+   "options": "\nAcquisition\nRetention\nMargin"
+  },
+  {
+   "fieldname": "earliest_start",
+   "fieldtype": "Date",
+   "label": "Earliest start"
+  },
+  {
+   "fieldname": "future_owner",
+   "fieldtype": "Link",
+   "label": "Owner when it starts",
+   "options": "User"
+  },
+  {
+   "fieldname": "why_not_inside",
+   "fieldtype": "Small Text",
+   "label": "Why it is NOT inside the current bet"
+  }
+ ],
+ "field_order": [
+  "title",
+  "unlocked_by",
+  "unlocking_bet_name",
+  "unlocking_status",
+  "c0",
+  "score",
+  "earliest_start",
+  "future_owner",
+  "why_not_inside"
+ ],
+ "permissions": [
+  {
+   "role": "Chief of Staff",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "report": 1,
+   "share": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Board Owner",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "export": 1,
+   "report": 1,
+   "email": 1
+  },
+  {
+   "role": "Board Viewer",
+   "read": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "report": 1,
+   "share": 1,
+   "print": 1,
+   "email": 1
+  }
+ ],
+ "title_field": "title",
+ "show_title_field_in_link": 1
+}

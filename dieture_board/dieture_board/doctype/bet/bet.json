@@ -1,0 +1,369 @@
+{
+ "doctype": "DocType",
+ "name": "Bet",
+ "module": "Dieture Board",
+ "custom": 0,
+ "istable": 0,
+ "issingle": 0,
+ "editable_grid": 1,
+ "track_changes": 1,
+ "engine": "InnoDB",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "creation": "2026-10-03 00:00:00",
+ "modified": "2026-10-03 00:00:00",
+ "idx": 0,
+ "fields": [
+  {
+   "fieldname": "rank_sb",
+   "fieldtype": "Section Break",
+   "label": "Rank and name"
+  },
+  {
+   "fieldname": "rank",
+   "fieldtype": "Int",
+   "label": "Rank (1 wins)",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "short_name",
+   "fieldtype": "Data",
+   "label": "Short name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "label": "Active (on the Board)",
+   "default": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "door",
+   "fieldtype": "Select",
+   "label": "Door used",
+   "options": "\nEvidence\nSignal\nSingle path",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "c0",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "one_sentence",
+   "fieldtype": "Small Text",
+   "label": "In one sentence (computed)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "then_what_sb",
+   "fieldtype": "Section Break",
+   "label": "THEN WHAT — the bet"
+  },
+  {
+   "fieldname": "then_what",
+   "fieldtype": "Small Text",
+   "label": "THEN WHAT: what changes on a score",
+   "reqd": 1
+  },
+  {
+   "fieldname": "number_today",
+   "fieldtype": "Data",
+   "label": "Number today",
+   "reqd": 1
+  },
+  {
+   "fieldname": "number_want",
+   "fieldtype": "Data",
+   "label": "Number we want",
+   "reqd": 1
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Data",
+   "label": "Unit",
+   "reqd": 1
+  },
+  {
+   "fieldname": "c1",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "by_when",
+   "fieldtype": "Date",
+   "label": "By when",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "main_score",
+   "fieldtype": "Select",
+   "label": "Main score it pushes",
+   "options": "\nAcquisition\nRetention\nMargin",
+   "reqd": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "also_helps",
+   "fieldtype": "Select",
+   "label": "Also helps",
+   "options": "\nAcquisition\nRetention\nMargin"
+  },
+  {
+   "fieldname": "so_what_sb",
+   "fieldtype": "Section Break",
+   "label": "SO WHAT — what must be true first (the link we test)"
+  },
+  {
+   "fieldname": "so_what",
+   "fieldtype": "Small Text",
+   "label": "SO WHAT",
+   "reqd": 1
+  },
+  {
+   "fieldname": "c2",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "so_what_today",
+   "fieldtype": "Data",
+   "label": "So-what number today"
+  },
+  {
+   "fieldname": "so_what_pass_mark",
+   "fieldtype": "Data",
+   "label": "So-what number the tiny test must hit"
+  },
+  {
+   "fieldname": "what_sb",
+   "fieldtype": "Section Break",
+   "label": "WHAT — the smallest build"
+  },
+  {
+   "fieldname": "what",
+   "fieldtype": "Small Text",
+   "label": "WHAT: the smallest build that produces the So what",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tiny_test",
+   "fieldtype": "Small Text",
+   "label": "Tiny test (two-week version): what we actually do"
+  },
+  {
+   "fieldname": "c3",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "tiny_test_by",
+   "fieldtype": "Date",
+   "label": "Tiny test done by"
+  },
+  {
+   "fieldname": "brief",
+   "fieldtype": "Link",
+   "label": "Problem Brief",
+   "options": "Problem Brief"
+  },
+  {
+   "fieldname": "owner_sb",
+   "fieldtype": "Section Break",
+   "label": "Owner and next step"
+  },
+  {
+   "fieldname": "bet_owner",
+   "fieldtype": "Link",
+   "label": "Owner (one person)",
+   "options": "User",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "owner_department",
+   "fieldtype": "Link",
+   "label": "Owner's department",
+   "options": "Department",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "next_step",
+   "fieldtype": "Small Text",
+   "label": "Next step"
+  },
+  {
+   "fieldname": "c4",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "next_step_by",
+   "fieldtype": "Date",
+   "label": "Next step by"
+  },
+  {
+   "fieldname": "next_step_who",
+   "fieldtype": "Link",
+   "label": "Next step who",
+   "options": "User"
+  },
+  {
+   "fieldname": "status_sb",
+   "fieldtype": "Section Break",
+   "label": "Status (owner picks the colour; the system does the rest)"
+  },
+  {
+   "fieldname": "colour",
+   "fieldtype": "Select",
+   "label": "Colour (owner picks)",
+   "options": "G\nY\nR",
+   "reqd": 1,
+   "default": "G",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "last_updated",
+   "fieldtype": "Date",
+   "label": "Last updated",
+   "read_only": 1
+  },
+  {
+   "fieldname": "days_since_update",
+   "fieldtype": "Int",
+   "label": "Days since update",
+   "read_only": 1
+  },
+  {
+   "fieldname": "effective_status",
+   "fieldtype": "Select",
+   "label": "System says",
+   "options": "\nGREEN\nYELLOW\nRED\nRED (stale)",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "c5",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "blocker",
+   "fieldtype": "Small Text",
+   "label": "What is blocking"
+  },
+  {
+   "fieldname": "who_can_unblock",
+   "fieldtype": "Data",
+   "label": "Who can unblock"
+  },
+  {
+   "fieldname": "doors_opened",
+   "fieldtype": "Small Text",
+   "label": "Doors it opens later (log them on Future Bet)"
+  },
+  {
+   "fieldname": "detail_link",
+   "fieldtype": "Data",
+   "label": "Link to execution detail (Project / Task / doc)"
+  }
+ ],
+ "field_order": [
+  "rank_sb",
+  "rank",
+  "short_name",
+  "active",
+  "door",
+  "c0",
+  "one_sentence",
+  "then_what_sb",
+  "then_what",
+  "number_today",
+  "number_want",
+  "unit",
+  "c1",
+  "by_when",
+  "main_score",
+  "also_helps",
+  "so_what_sb",
+  "so_what",
+  "c2",
+  "so_what_today",
+  "so_what_pass_mark",
+  "what_sb",
+  "what",
+  "tiny_test",
+  "c3",
+  "tiny_test_by",
+  "brief",
+  "owner_sb",
+  "bet_owner",
+  "owner_department",
+  "next_step",
+  "c4",
+  "next_step_by",
+  "next_step_who",
+  "status_sb",
+  "colour",
+  "last_updated",
+  "days_since_update",
+  "effective_status",
+  "c5",
+  "blocker",
+  "who_can_unblock",
+  "doors_opened",
+  "detail_link"
+ ],
+ "permissions": [
+  {
+   "role": "Chief of Staff",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "report": 1,
+   "share": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Board Owner",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "export": 1,
+   "report": 1,
+   "email": 1
+  },
+  {
+   "role": "Board Viewer",
+   "read": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "report": 1,
+   "share": 1,
+   "print": 1,
+   "email": 1
+  }
+ ],
+ "autoname": "format:BET-{rank}",
+ "title_field": "short_name",
+ "show_title_field_in_link": 1,
+ "search_fields": "short_name,bet_owner"
+}

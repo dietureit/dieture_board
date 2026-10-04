@@ -1,0 +1,79 @@
+{
+ "doctype": "DocType",
+ "name": "Brief Outcome",
+ "module": "Dieture Board",
+ "custom": 0,
+ "istable": 1,
+ "issingle": 0,
+ "editable_grid": 1,
+ "track_changes": 1,
+ "engine": "InnoDB",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "creation": "2026-10-03 00:00:00",
+ "modified": "2026-10-03 00:00:00",
+ "idx": 0,
+ "fields": [
+  {
+   "fieldname": "rank",
+   "fieldtype": "Int",
+   "label": "Rank",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "what_changes",
+   "fieldtype": "Data",
+   "label": "What changes",
+   "in_list_view": 1,
+   "columns": 3
+  },
+  {
+   "fieldname": "number_today",
+   "fieldtype": "Data",
+   "label": "Number today",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "number_want",
+   "fieldtype": "Data",
+   "label": "Number we want",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "when_checked",
+   "fieldtype": "Data",
+   "label": "When we check",
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "number_owner",
+   "fieldtype": "Link",
+   "label": "Who owns the number",
+   "options": "User",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "how_measured",
+   "fieldtype": "Data",
+   "label": "How we measure it",
+   "in_list_view": 1,
+   "columns": 1
+  }
+ ],
+ "field_order": [
+  "rank",
+  "what_changes",
+  "number_today",
+  "number_want",
+  "when_checked",
+  "number_owner",
+  "how_measured"
+ ],
+ "permissions": []
+}

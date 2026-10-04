@@ -1,0 +1,30 @@
+[
+ {
+  "doctype": "Role",
+  "name": "Chief of Staff",
+  "role_name": "Chief of Staff",
+  "desk_access": 1,
+  "is_custom": 1
+ },
+ {
+  "doctype": "Role",
+  "name": "Board Owner",
+  "role_name": "Board Owner",
+  "desk_access": 1,
+  "is_custom": 1
+ },
+ {
+  "doctype": "Role",
+  "name": "Board Viewer",
+  "role_name": "Board Viewer",
+  "desk_access": 1,
+  "is_custom": 1
+ },
+ {
+  "doctype": "Role",
+  "name": "Board Manager",
+  "role_name": "Board Manager",
+  "desk_access": 1,
+  "is_custom": 1
+ }
+]

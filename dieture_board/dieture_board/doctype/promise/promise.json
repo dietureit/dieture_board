@@ -1,0 +1,286 @@
+{
+ "doctype": "DocType",
+ "name": "Promise",
+ "module": "Dieture Board",
+ "custom": 0,
+ "istable": 0,
+ "issingle": 0,
+ "editable_grid": 1,
+ "track_changes": 1,
+ "engine": "InnoDB",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "creation": "2026-10-03 00:00:00",
+ "modified": "2026-10-03 00:00:00",
+ "idx": 0,
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "PROM-.####",
+   "default": "PROM-.####",
+   "hidden": 1
+  },
+  {
+   "fieldname": "bet",
+   "fieldtype": "Link",
+   "label": "Bet #",
+   "options": "Bet",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "bet_short_name",
+   "fieldtype": "Data",
+   "label": "Bet short name",
+   "fetch_from": "bet.short_name",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "deliverable",
+   "fieldtype": "Small Text",
+   "label": "What exactly will be delivered",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "c0",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "maker",
+   "fieldtype": "Link",
+   "label": "MAKER (one person)",
+   "options": "User",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "due_date",
+   "fieldtype": "Date",
+   "label": "Due date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "redated_from",
+   "fieldtype": "Date",
+   "label": "Re-dated from (if moved)"
+  },
+  {
+   "fieldname": "dod_sb",
+   "fieldtype": "Section Break",
+   "label": "Definition of done — agreed by maker AND receiver BEFORE starting"
+  },
+  {
+   "fieldname": "definition_of_done",
+   "fieldtype": "Small Text",
+   "label": "Definition of done",
+   "reqd": 1
+  },
+  {
+   "fieldname": "c1",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "receiver",
+   "fieldtype": "Link",
+   "label": "RECEIVER who must accept it",
+   "options": "User",
+   "reqd": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "acc_sb",
+   "fieldtype": "Section Break",
+   "label": "Delivery and acceptance"
+  },
+  {
+   "fieldname": "done",
+   "fieldtype": "Check",
+   "label": "Done? (maker ticks)"
+  },
+  {
+   "fieldname": "sent_for_acceptance_on",
+   "fieldtype": "Date",
+   "label": "Sent for acceptance on"
+  },
+  {
+   "fieldname": "acceptance_due",
+   "fieldtype": "Date",
+   "label": "Acceptance due (+2 working days)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "c2",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "accepted",
+   "fieldtype": "Check",
+   "label": "Accepted? (receiver ticks)"
+  },
+  {
+   "fieldname": "accepted_on",
+   "fieldtype": "Date",
+   "label": "Accepted on"
+  },
+  {
+   "fieldname": "ret_sb",
+   "fieldtype": "Section Break",
+   "label": "Returns"
+  },
+  {
+   "fieldname": "rework_returns",
+   "fieldtype": "Int",
+   "label": "Returns for rework — against MAKER (reason quoted the definition of done)",
+   "default": 0
+  },
+  {
+   "fieldname": "unclear_returns",
+   "fieldtype": "Int",
+   "label": "Unclear or late returns — against RECEIVER (reason not in definition, or past acceptance due)",
+   "default": 0
+  },
+  {
+   "fieldname": "c3",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "last_return_reason",
+   "fieldtype": "Small Text",
+   "label": "Last return reason (must point to a line in the definition of done)"
+  },
+  {
+   "fieldname": "sys_sb",
+   "fieldtype": "Section Break",
+   "label": "System"
+  },
+  {
+   "fieldname": "days_overdue",
+   "fieldtype": "Int",
+   "label": "Days overdue",
+   "read_only": 1
+  },
+  {
+   "fieldname": "on_time",
+   "fieldtype": "Select",
+   "label": "On time?",
+   "options": "\nY\nN",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "System says",
+   "options": "\nOn Track\nDue This Week\nOverdue\nAwaiting Acceptance\nReceiver Overdue\nDone",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "c4",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Small Text",
+   "label": "Note"
+  }
+ ],
+ "field_order": [
+  "naming_series",
+  "bet",
+  "bet_short_name",
+  "deliverable",
+  "c0",
+  "department",
+  "maker",
+  "due_date",
+  "redated_from",
+  "dod_sb",
+  "definition_of_done",
+  "c1",
+  "receiver",
+  "acc_sb",
+  "done",
+  "sent_for_acceptance_on",
+  "acceptance_due",
+  "c2",
+  "accepted",
+  "accepted_on",
+  "ret_sb",
+  "rework_returns",
+  "unclear_returns",
+  "c3",
+  "last_return_reason",
+  "sys_sb",
+  "days_overdue",
+  "on_time",
+  "status",
+  "c4",
+  "note"
+ ],
+ "permissions": [
+  {
+   "role": "Chief of Staff",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "report": 1,
+   "share": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Board Owner",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "export": 1,
+   "report": 1,
+   "email": 1
+  },
+  {
+   "role": "Board Viewer",
+   "read": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "report": 1,
+   "share": 1,
+   "print": 1,
+   "email": 1
+  }
+ ],
+ "autoname": "naming_series:",
+ "title_field": "deliverable",
+ "show_title_field_in_link": 1,
+ "search_fields": "deliverable,maker,receiver"
+}

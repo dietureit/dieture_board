@@ -1,0 +1,177 @@
+{
+ "doctype": "DocType",
+ "name": "Problem Brief",
+ "module": "Dieture Board",
+ "custom": 0,
+ "istable": 0,
+ "issingle": 0,
+ "editable_grid": 1,
+ "track_changes": 1,
+ "engine": "InnoDB",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "creation": "2026-10-03 00:00:00",
+ "modified": "2026-10-03 00:00:00",
+ "idx": 0,
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Title",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "door",
+   "fieldtype": "Select",
+   "label": "Door used",
+   "options": "\nEvidence\nSignal",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "door_detail",
+   "fieldtype": "Small Text",
+   "label": "Which exit reason (Evidence) or which observed customer behaviour (Signal)"
+  },
+  {
+   "fieldname": "order_sb",
+   "fieldtype": "Section Break",
+   "label": "Written in this order: Problem → THEN WHAT → SO WHAT → WHAT"
+  },
+  {
+   "fieldname": "problem",
+   "fieldtype": "Text",
+   "label": "0. The PROBLEM we fell in love with (facts, people, numbers)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "then_what",
+   "fieldtype": "Small Text",
+   "label": "1. THEN WHAT — the bet (a score number by a date)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "so_what",
+   "fieldtype": "Small Text",
+   "label": "2. SO WHAT — what must be true first, with its own number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "what",
+   "fieldtype": "Small Text",
+   "label": "3. WHAT — the smallest build (written LAST)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "outcomes_sb",
+   "fieldtype": "Section Break",
+   "label": "4. Everything this bet must deliver, ranked"
+  },
+  {
+   "fieldname": "outcomes",
+   "fieldtype": "Table",
+   "label": "Outcomes",
+   "options": "Brief Outcome"
+  },
+  {
+   "fieldname": "rest_sb",
+   "fieldtype": "Section Break",
+   "label": "5–10"
+  },
+  {
+   "fieldname": "tradeoffs",
+   "fieldtype": "Small Text",
+   "label": "5. Tie-breaker rules (written BEFORE design starts)"
+  },
+  {
+   "fieldname": "tiny_test",
+   "fieldtype": "Small Text",
+   "label": "6. Tiny test (two-week version) — measures the SO WHAT number"
+  },
+  {
+   "fieldname": "decision_rule",
+   "fieldtype": "Small Text",
+   "label": "7. Decision rule after the tiny test: GO / RE-BRIEF / STOP"
+  },
+  {
+   "fieldname": "not_doing",
+   "fieldtype": "Small Text",
+   "label": "8. NOT doing in this phase"
+  },
+  {
+   "fieldname": "promises_needed",
+   "fieldtype": "Small Text",
+   "label": "9. Promises this bet needs (then create them as Promise records)"
+  },
+  {
+   "fieldname": "future_doors",
+   "fieldtype": "Small Text",
+   "label": "10. And THEN what? Doors this opens later (log them as Future Bet)"
+  }
+ ],
+ "field_order": [
+  "title",
+  "door",
+  "door_detail",
+  "order_sb",
+  "problem",
+  "then_what",
+  "so_what",
+  "what",
+  "outcomes_sb",
+  "outcomes",
+  "rest_sb",
+  "tradeoffs",
+  "tiny_test",
+  "decision_rule",
+  "not_doing",
+  "promises_needed",
+  "future_doors"
+ ],
+ "permissions": [
+  {
+   "role": "Chief of Staff",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "report": 1,
+   "share": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Board Owner",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "export": 1,
+   "report": 1,
+   "email": 1
+  },
+  {
+   "role": "Board Viewer",
+   "read": 1,
+   "report": 1,
+   "export": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "report": 1,
+   "share": 1,
+   "print": 1,
+   "email": 1
+  }
+ ],
+ "autoname": "field:title",
+ "title_field": "title",
+ "show_title_field_in_link": 1
+}

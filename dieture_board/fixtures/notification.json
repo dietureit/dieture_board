@@ -1,0 +1,70 @@
+[
+ {
+  "doctype": "Notification",
+  "name": "Promise Overdue",
+  "module": "Dieture Board",
+  "enabled": 1,
+  "channel": "Email",
+  "document_type": "Promise",
+  "event": "Days After",
+  "date_changed": "due_date",
+  "days_in_advance": 1,
+  "subject": "OVERDUE: {{ doc.deliverable }} (Bet: {{ doc.bet_short_name }})",
+  "message": "<p>This promise was due {{ doc.due_date }} and is not yet accepted.</p><p>Maker: {{ doc.maker }}. Receiver: {{ doc.receiver }}.</p><p>Re-date it with a note, or deliver it. It will be on the Sunday RED digest.</p>",
+  "condition": "not doc.accepted and not doc.done",
+  "recipients": [
+   {
+    "receiver_by_document_field": "maker"
+   },
+   {
+    "receiver_by_document_field": "receiver"
+   },
+   {
+    "receiver_by_role": "Chief of Staff"
+   }
+  ]
+ },
+ {
+  "doctype": "Notification",
+  "name": "Receiver Acceptance Overdue",
+  "module": "Dieture Board",
+  "enabled": 1,
+  "channel": "Email",
+  "document_type": "Promise",
+  "event": "Days After",
+  "date_changed": "acceptance_due",
+  "days_in_advance": 0,
+  "subject": "Your acceptance is overdue: {{ doc.deliverable }}",
+  "message": "<p>{{ doc.maker }} sent this for acceptance on {{ doc.sent_for_acceptance_on }}. The 2 working days are up.</p><p>Accept it, or return it with a reason that points to a line in the definition of done:</p><blockquote>{{ doc.definition_of_done }}</blockquote><p>From now the delay counts against the receiver.</p>",
+  "condition": "doc.done and not doc.accepted",
+  "recipients": [
+   {
+    "receiver_by_document_field": "receiver"
+   },
+   {
+    "receiver_by_role": "Chief of Staff"
+   }
+  ]
+ },
+ {
+  "doctype": "Notification",
+  "name": "Bet Stale",
+  "module": "Dieture Board",
+  "enabled": 1,
+  "channel": "Email",
+  "document_type": "Bet",
+  "event": "Value Change",
+  "subject": "Your bet has not been updated for 7 days: {{ doc.short_name }}",
+  "message": "<p>Bet {{ doc.rank }} - {{ doc.short_name }} is now RED (stale). Update next step, colour and date (5 minutes).</p>",
+  "condition": "doc.active and doc.effective_status == 'RED (stale)'",
+  "recipients": [
+   {
+    "receiver_by_document_field": "bet_owner"
+   },
+   {
+    "receiver_by_role": "Chief of Staff"
+   }
+  ],
+  "value_changed": "effective_status"
+ }
+]

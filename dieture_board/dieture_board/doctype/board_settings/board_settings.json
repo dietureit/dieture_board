@@ -1,0 +1,127 @@
+{
+ "doctype": "DocType",
+ "name": "Board Settings",
+ "module": "Dieture Board",
+ "custom": 0,
+ "istable": 0,
+ "issingle": 1,
+ "editable_grid": 1,
+ "track_changes": 1,
+ "engine": "InnoDB",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "creation": "2026-10-03 00:00:00",
+ "modified": "2026-10-03 00:00:00",
+ "idx": 0,
+ "fields": [
+  {
+   "fieldname": "wip_limit",
+   "fieldtype": "Int",
+   "label": "Max active bets",
+   "default": 7
+  },
+  {
+   "fieldname": "stale_days",
+   "fieldtype": "Int",
+   "label": "Days without update before RED (stale)",
+   "default": 7
+  },
+  {
+   "fieldname": "acceptance_workdays",
+   "fieldtype": "Int",
+   "label": "Working days the receiver has to accept",
+   "default": 2
+  },
+  {
+   "fieldname": "weekend_days",
+   "fieldtype": "Data",
+   "label": "Weekend days (Python weekday numbers, Mon=0)",
+   "default": "4,5",
+   "description": "4,5 = Friday and Saturday (Qatar)"
+  },
+  {
+   "fieldname": "exit_sb",
+   "fieldtype": "Section Break",
+   "label": "Exit-Reason Split source"
+  },
+  {
+   "fieldname": "cancellation_doctype",
+   "fieldtype": "Link",
+   "label": "DocType that holds cancellations",
+   "options": "DocType",
+   "default": "Subscription"
+  },
+  {
+   "fieldname": "exit_reason_field",
+   "fieldtype": "Data",
+   "label": "Field holding the exit reason",
+   "default": "exit_reason"
+  },
+  {
+   "fieldname": "selected_meals_field",
+   "fieldtype": "Data",
+   "label": "Field holding 'selected meals?' (Check)",
+   "default": "selected_meals"
+  },
+  {
+   "fieldname": "cancelled_filter_field",
+   "fieldtype": "Data",
+   "label": "Field that marks a cancellation",
+   "default": "status"
+  },
+  {
+   "fieldname": "cancelled_filter_value",
+   "fieldtype": "Data",
+   "label": "Value meaning cancelled",
+   "default": "Cancelled"
+  },
+  {
+   "fieldname": "cancel_date_field",
+   "fieldtype": "Data",
+   "label": "Field holding the cancellation date",
+   "default": "modified"
+  }
+ ],
+ "field_order": [
+  "wip_limit",
+  "stale_days",
+  "acceptance_workdays",
+  "weekend_days",
+  "exit_sb",
+  "cancellation_doctype",
+  "exit_reason_field",
+  "selected_meals_field",
+  "cancelled_filter_field",
+  "cancelled_filter_value",
+  "cancel_date_field"
+ ],
+ "permissions": [
+  {
+   "role": "Chief of Staff",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "report": 1
+  },
+  {
+   "role": "Board Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "export": 1,
+   "report": 1
+  },
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "report": 1
+  }
+ ]
+}

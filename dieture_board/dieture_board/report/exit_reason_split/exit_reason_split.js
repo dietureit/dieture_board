@@ -1,0 +1,1 @@
+frappe.query_reports["Exit Reason Split"] = { filters: [{fieldname: "from_date", label: "Cancellations since", fieldtype: "Date", default: frappe.datetime.add_months(frappe.datetime.get_today(), -6)}] };

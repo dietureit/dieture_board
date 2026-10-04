@@ -1,0 +1,22 @@
+{
+ "doctype": "Report",
+ "name": "People",
+ "report_name": "People",
+ "report_type": "Script Report",
+ "ref_doctype": "Promise",
+ "module": "Dieture Board",
+ "is_standard": "Yes",
+ "disabled": 0,
+ "owner": "Administrator",
+ "roles": [
+  {
+   "role": "Chief of Staff"
+  },
+  {
+   "role": "Board Manager"
+  },
+  {
+   "role": "System Manager"
+  }
+ ]
+}

@@ -1,0 +1,24 @@
+[
+ {
+  "doctype": "Custom Field",
+  "name": "Subscription-exit_reason",
+  "dt": "Subscription",
+  "module": "Dieture Board",
+  "fieldname": "exit_reason",
+  "fieldtype": "Select",
+  "label": "Exit reason (tag ONE at cancellation)",
+  "options": "\nDidn't like meals\nNo results / plateaued\nToo expensive\nService or delivery issue\nLife change / travel\nOther",
+  "insert_after": "status",
+  "in_standard_filter": 1
+ },
+ {
+  "doctype": "Custom Field",
+  "name": "Subscription-selected_meals",
+  "dt": "Subscription",
+  "module": "Dieture Board",
+  "fieldname": "selected_meals",
+  "fieldtype": "Check",
+  "label": "Customer selected their meals?",
+  "insert_after": "exit_reason"
+ }
+]

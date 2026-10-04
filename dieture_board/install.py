@@ -12,6 +12,7 @@ from dieture_board.demo_data import (
     PEOPLE_STANDING,
     SCORECARD_VALUES,
 )
+from dieture_board.production_import import import_embedded_production_data
 
 SCORES = [
     ("Acquisition", "How many new customers we win each month, and what each one costs us to win", "New paying subscribers per month; blended cost per new customer (QAR)"),
@@ -47,6 +48,16 @@ def load_full_demo_data():
     _load_demo_parking_lot(users, anchor_date)
     frappe.db.commit()
     print("Full Dieture Board demo data loaded: 7 bets, 20 promises, 44 standing numbers, 9 future bets, 5 parking lot items, 3 briefs.")
+
+
+def load_production_board_data():
+    """Run the embedded production Board payload without a migration patch.
+
+    Run with: bench --site <site> execute dieture_board.install.load_production_board_data
+    """
+    result = import_embedded_production_data()
+    print("Production Board import result: {0}".format(result))
+    return result
 
 def load_sample_data():
     """bench --site <site> execute dieture_board.install.load_sample_data

@@ -27,6 +27,11 @@ WORKFLOW_FIELDS = (
 
 def import_embedded_production_data():
 	"""Load the deployment payload bundled in ``dieture_board.data``."""
+	if _is_local_demo_board():
+		frappe.logger("dieture_board").warning(
+			"Skipped production Board payload on di.local because demo Board records are present."
+		)
+		return {"skipped": "di.local demo Board data is present"}
 	path = files("dieture_board.data").joinpath(PAYLOAD_FILE)
 	with path.open(encoding="utf-8") as payload_file:
 		return import_production_payload(json.load(payload_file))

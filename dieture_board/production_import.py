@@ -158,9 +158,11 @@ def _upsert_parking_lot_item(record, users):
 
 def _validate_payload(payload):
 	required_sections = ("user_map", "department_map", "scorecards", "bets", "promises", "standing_numbers", "future_bets", "parking_lot")
-	missing_sections = [section for section in required_sections if not payload.get(section)]
+	missing_sections = [section for section in required_sections if section not in payload or payload[section] is None]
 	if missing_sections:
 		frappe.throw(_("Production Board payload is missing: {0}").format(", ".join(missing_sections)))
+	if not payload["user_map"] or not payload["department_map"]:
+		frappe.throw(_("Production Board payload needs User Map and Department Map entries."))
 	actual_counts = {section: len(payload[section]) for section in required_sections[2:]}
 	if payload.get("manifest") and payload["manifest"] != actual_counts:
 		frappe.throw(_("Production Board payload manifest does not match its records."))

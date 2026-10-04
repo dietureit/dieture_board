@@ -26,13 +26,14 @@ def build_payload(workbook_path):
 	user_map = _read_map(workbook, "User Map", "Workbook label", "ERP user email")
 	department_map = _read_map(workbook, "Department Map", "Workbook department", "ERP Department name")
 
+	bets = _bets(workbook["Board"])
 	payload = {
 		"version": 1,
 		"user_map": user_map,
 		"department_map": department_map,
 		"scorecards": _scorecards(workbook["Scorecard"]),
-		"bets": _bets(workbook["Board"]),
-		"promises": _promises(workbook["Promises"]),
+		"bets": bets,
+		"promises": _promises(workbook["Promises"], {record["rank"] for record in bets}),
 		"standing_numbers": _standing_numbers(workbook["Departments"], workbook["People"]),
 		"future_bets": _future_bets(workbook["Future Bets"]),
 		"parking_lot": _parking_lot(workbook["Parking Lot"]),
@@ -62,11 +63,11 @@ def _bets(sheet):
 	for row in _rows(sheet, 10):
 		if not isinstance(_value(row, 0), (int, float)):
 			continue
-		records.append({
+		record = {
 			"rank": int(_value(row, 0)), "active": 1, "short_name": _text(_value(row, 3)),
 			"then_what": _text(_value(row, 4)), "number_today": _text(_value(row, 5)),
 			"number_want": _text(_value(row, 6)), "unit": _text(_value(row, 7)), "by_when": _date(_value(row, 8)),
-			"main_score": _text(_value(row, 9)), "also_helps": _text(_value(row, 10)),
+			"main_score": _score(_value(row, 9)), "also_helps": _score(_value(row, 10)),
 			"so_what": _text(_value(row, 11)), "so_what_today": _text(_value(row, 12)),
 			"so_what_pass_mark": _text(_value(row, 13)), "what": _text(_value(row, 14)),
 			"tiny_test": _text(_value(row, 15)), "tiny_test_by": _date(_value(row, 16)),
@@ -75,14 +76,16 @@ def _bets(sheet):
 			"next_step_who_label": _text(_value(row, 21)), "colour": _text(_value(row, 22)),
 			"last_updated": _date(_value(row, 23)), "blocker": _text(_value(row, 26)),
 			"who_can_unblock": _text(_value(row, 27)), "doors_opened": _text(_value(row, 28)),
-		})
+		}
+		if _is_complete_bet(record):
+			records.append(record)
 	return records
 
 
-def _promises(sheet):
+def _promises(sheet, bet_ranks):
 	records = []
 	for row in _rows(sheet, 6):
-		if not _value(row, 0):
+		if not _value(row, 0) or int(_value(row, 0)) not in bet_ranks:
 			continue
 		records.append({
 			"bet_rank": int(_value(row, 0)), "deliverable": _text(_value(row, 2)),
@@ -118,7 +121,7 @@ def _standing_records(department, person, role_title, row, *starts):
 	records = []
 	for start in starts:
 		metric = _text(_value(row, start))
-		if metric:
+		if metric and _text(_value(row, start + 1)):
 			target = _text(_value(row, start + 1))
 			this_week = _text(_value(row, start + 2))
 			records.append({
@@ -133,7 +136,7 @@ def _future_bets(sheet):
 	return [{
 		"title": _text(_value(row, 0)), "unlocked_by_rank": _number(_value(row, 1)),
 		"unlocking_bet_name": _text(_value(row, 2)), "unlocking_status": _text(_value(row, 3)),
-		"score": _text(_value(row, 4)), "earliest_start": _date(_value(row, 5)),
+		"score": _score(_value(row, 4)), "earliest_start": _date(_value(row, 5)),
 		"future_owner_label": _text(_value(row, 6)), "why_not_inside": _text(_value(row, 7)),
 	} for row in _rows(sheet, 6) if _value(row, 0)]
 
@@ -178,7 +181,12 @@ def _date(value):
 		return value.date().isoformat()
 	if isinstance(value, date):
 		return value.isoformat()
-	return _text(value)
+	if isinstance(value, str):
+		try:
+			return datetime.fromisoformat(value.strip()).date().isoformat()
+		except ValueError:
+			return None
+	return None
 
 
 def _number(value):
@@ -187,6 +195,28 @@ def _number(value):
 
 def _checkbox(value):
 	return int(str(value).strip().upper() in {"Y", "YES", "1", "TRUE"})
+
+
+def _score(value):
+	text = _text(value)
+	if not text:
+		return None
+	lower = text.lower()
+	if "acqui" in lower:
+		return "Acquisition"
+	if "retention" in lower:
+		return "Retention"
+	if "margin" in lower:
+		return "Margin"
+	return None
+
+
+def _is_complete_bet(record):
+	required = (
+		"short_name", "then_what", "number_today", "number_want", "unit", "by_when", "main_score",
+		"so_what", "what", "bet_owner_label", "colour",
+	)
+	return all(record.get(field) for field in required)
 
 
 def _arguments():

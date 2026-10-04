@@ -8,7 +8,7 @@
  "is_hidden": 0,
  "icon": "target",
  "sequence_id": 1,
- "content": "[{\"id\": \"h1\", \"type\": \"header\", \"data\": {\"text\": \"<span class='h4'><b>Dieture Board</b></span>\", \"col\": 12}}, {\"id\": \"p1\", \"type\": \"paragraph\", \"data\": {\"text\": \"Three scores; seven ranked bets, each written backwards from THEN WHAT to WHAT. Every bet starts with a tiny test of its SO WHAT; every piece of work is a promise with a name, a date and an agreed definition of done. The system turns things RED by itself. Thursday: owners update. Sunday: Chief of Staff reviews RED rows.\", \"col\": 12}}, {\"id\": \"s1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"The Board\", \"col\": 4}}, {\"id\": \"s2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"My promises\", \"col\": 4}}, {\"id\": \"s3\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"New Bet\", \"col\": 4}}, {\"id\": \"c1\", \"type\": \"card\", \"data\": {\"card_name\": \"Everyone\", \"col\": 4}}, {\"id\": \"c2\", \"type\": \"card\", \"data\": {\"card_name\": \"Chief of Staff and bet owners\", \"col\": 4}}, {\"id\": \"c3\", \"type\": \"card\", \"data\": {\"card_name\": \"Managers only\", \"col\": 4}}]",
+ "content": "[{\"id\": \"h1\", \"type\": \"header\", \"data\": {\"text\": \"<span class='h4'><b>Dieture Board</b></span>\", \"col\": 12}}, {\"id\": \"p1\", \"type\": \"paragraph\", \"data\": {\"text\": \"Three scores; seven ranked bets, each written backwards from THEN WHAT to WHAT. Every bet starts with a tiny test of its SO WHAT; every piece of work is a promise with a name, a date and an agreed definition of done. The system turns things RED by itself. Thursday: owners update. Sunday: Chief of Staff reviews RED rows.\", \"col\": 12}}, {\"id\": \"h2\", \"type\": \"header\", \"data\": {\"text\": \"<span class='h5'><b>Board Health</b></span>\", \"col\": 12}}, {\"id\": \"s4\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Active Bets\", \"col\": 3}}, {\"id\": \"s5\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"GREEN Bets\", \"col\": 3}}, {\"id\": \"s6\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"YELLOW Bets\", \"col\": 3}}, {\"id\": \"s7\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"RED Bets\", \"col\": 3}}, {\"id\": \"s1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"The Board\", \"col\": 4}}, {\"id\": \"s2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"My promises\", \"col\": 4}}, {\"id\": \"s3\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"New Bet\", \"col\": 4}}, {\"id\": \"c1\", \"type\": \"card\", \"data\": {\"card_name\": \"Everyone\", \"col\": 4}}, {\"id\": \"c2\", \"type\": \"card\", \"data\": {\"card_name\": \"Chief of Staff and bet owners\", \"col\": 4}}, {\"id\": \"c3\", \"type\": \"card\", \"data\": {\"card_name\": \"Managers only\", \"col\": 4}}]",
  "links": [
   {
    "label": "Everyone",
@@ -162,6 +162,38 @@
    "link_to": "Bet",
    "color": "Blue",
    "doc_view": "New"
+  },
+  {
+   "label": "Active Bets",
+   "type": "DocType",
+   "link_to": "Bet",
+   "color": "Blue",
+   "doc_view": "List",
+   "stats_filter": "{\"active\": [\"=\", 1]}"
+  },
+  {
+   "label": "GREEN Bets",
+   "type": "DocType",
+   "link_to": "Bet",
+   "color": "Green",
+   "doc_view": "List",
+   "stats_filter": "{\"active\": [\"=\", 1], \"effective_status\": [\"=\", \"GREEN\"]}"
+  },
+  {
+   "label": "YELLOW Bets",
+   "type": "DocType",
+   "link_to": "Bet",
+   "color": "Orange",
+   "doc_view": "List",
+   "stats_filter": "{\"active\": [\"=\", 1], \"effective_status\": [\"=\", \"YELLOW\"]}"
+  },
+  {
+   "label": "RED Bets",
+   "type": "DocType",
+   "link_to": "Bet",
+   "color": "Red",
+   "doc_view": "List",
+   "stats_filter": "{\"active\": [\"=\", 1], \"effective_status\": [\"in\", [\"RED\", \"RED (stale)\"]]}"
   }
  ],
  "charts": [],

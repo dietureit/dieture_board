@@ -1,5 +1,17 @@
 import frappe
-from frappe.utils import add_days, nowdate
+from frappe.utils import add_days, date_diff, getdate, nowdate
+
+from dieture_board.demo_data import (
+    DEMO_BETS,
+    DEMO_BRIEFS,
+    DEMO_FUTURE_BETS,
+    DEMO_PROMISES,
+    DEPARTMENT_MAP,
+    DEPARTMENT_STANDING,
+    PARKING_LOT,
+    PEOPLE_STANDING,
+    SCORECARD_VALUES,
+)
 
 SCORES = [
     ("Acquisition", "How many new customers we win each month, and what each one costs us to win", "New paying subscribers per month; blended cost per new customer (QAR)"),
@@ -16,6 +28,25 @@ def after_install():
         s.update({"wip_limit": 7, "stale_days": 7, "acceptance_workdays": 2, "weekend_days": "4,5"})
         s.save(ignore_permissions=True)
     frappe.db.commit()
+
+
+def load_full_demo_data():
+    """Load the workbook demo data without depending on local spreadsheet files.
+
+    Run with: bench --site <site> execute dieture_board.install.load_full_demo_data
+    """
+    anchor_date = getdate(nowdate())
+    _validate_demo_departments()
+    users = _ensure_demo_users()
+    _hydrate_scorecards(anchor_date)
+    brief_names = _load_demo_briefs(users)
+    bet_names = _load_demo_bets(users, brief_names, anchor_date)
+    _load_demo_promises(users, bet_names, anchor_date)
+    _load_demo_standing_numbers(users, anchor_date)
+    _load_demo_future_bets(users, bet_names, anchor_date)
+    _load_demo_parking_lot(users, anchor_date)
+    frappe.db.commit()
+    print("Full Dieture Board demo data loaded: 7 bets, 20 promises, 44 standing numbers, 9 future bets, 5 parking lot items, 3 briefs.")
 
 def load_sample_data():
     """bench --site <site> execute dieture_board.install.load_sample_data
@@ -69,3 +100,204 @@ def load_sample_data():
             frappe.get_doc(dict(doctype="Future Bet", title=fb[0], unlocked_by=names.get(fb[1]) if fb[1] else None, score=fb[2], why_not_inside=fb[3])).insert(ignore_permissions=True)
     frappe.db.commit()
     print("Sample data loaded: 7 bets, 5 promises, 3 future bets. All numbers are pretend.")
+
+
+def _validate_demo_departments():
+    missing = sorted({department for department in DEPARTMENT_MAP.values() if not frappe.db.exists("Department", department)})
+    if missing:
+        frappe.throw("Demo data needs these Department records before it can load: {0}".format(", ".join(missing)))
+
+
+def _ensure_demo_users():
+    users = {}
+    for person in _demo_people():
+        email = _demo_email(person)
+        if not frappe.db.exists("User", email):
+            frappe.get_doc({
+                "doctype": "User",
+                "email": email,
+                "first_name": person,
+                "enabled": 0,
+                "send_welcome_email": 0,
+                "user_type": "System User",
+            }).insert(ignore_permissions=True)
+        users[person] = email
+    return users
+
+
+def _hydrate_scorecards(anchor_date):
+    target_date = _shifted_date("2027-03-31", anchor_date)
+    for score, baseline, current, target in SCORECARD_VALUES:
+        values = {"baseline": baseline, "current": current, "target": target, "target_date": target_date}
+        if frappe.db.exists("Scorecard Entry", score):
+            doc = frappe.get_doc("Scorecard Entry", score)
+            changed = False
+            for field, value in values.items():
+                if not doc.get(field):
+                    doc.set(field, value)
+                    changed = True
+            if changed:
+                doc.save(ignore_permissions=True)
+            continue
+        frappe.get_doc({"doctype": "Scorecard Entry", "score": score, **values}).insert(ignore_permissions=True)
+
+
+def _load_demo_briefs(users):
+    names = {}
+    for brief in DEMO_BRIEFS:
+        if frappe.db.exists("Problem Brief", brief["title"]):
+            names[brief["title"]] = brief["title"]
+            continue
+        data = {key: value for key, value in brief.items() if key != "outcomes"}
+        data["doctype"] = "Problem Brief"
+        data["outcomes"] = [
+            {
+                "rank": rank,
+                "what_changes": what_changes,
+                "number_today": number_today,
+                "number_want": number_want,
+                "when_checked": when_checked,
+                "number_owner": users[owner],
+                "how_measured": when_checked,
+            }
+            for rank, what_changes, number_today, number_want, when_checked, owner in brief["outcomes"]
+        ]
+        doc = frappe.get_doc(data).insert(ignore_permissions=True)
+        names[brief["title"]] = doc.name
+    return names
+
+
+def _load_demo_bets(users, brief_names, anchor_date):
+    brief_by_rank = {1: "Smart defaults for non-selecting customers", 3: "Component (Lego) kitchen"}
+    names = {}
+    for bet in DEMO_BETS:
+        existing = frappe.db.exists("Bet", {"rank": bet["rank"]})
+        if existing:
+            existing_name = frappe.db.get_value("Bet", existing, "short_name")
+            if existing_name != bet["short_name"]:
+                frappe.throw("Cannot load demo Bet {0}: rank {1} already belongs to '{2}'.".format(bet["short_name"], bet["rank"], existing_name))
+            names[bet["rank"]] = existing
+            continue
+        data = {key: value for key, value in bet.items() if key not in {"owner", "department", "last_updated"}}
+        for field in ("by_when", "tiny_test_by", "next_step_by"):
+            data[field] = _shifted_date(data[field], anchor_date)
+        data.update({
+            "doctype": "Bet",
+            "active": 1,
+            "bet_owner": users[bet["owner"]],
+            "owner_department": DEPARTMENT_MAP[bet["department"]],
+            "next_step_who": users[bet["next_step_who"]],
+            "brief": brief_names.get(brief_by_rank.get(bet["rank"])),
+        })
+        doc = frappe.get_doc(data).insert(ignore_permissions=True)
+        doc.last_updated = _shifted_date(bet["last_updated"], anchor_date)
+        doc.db_set("last_updated", doc.last_updated, update_modified=False)
+        doc.refresh_status_only()
+        names[bet["rank"]] = doc.name
+    return names
+
+
+def _load_demo_promises(users, bet_names, anchor_date):
+    for record in DEMO_PROMISES:
+        (rank, deliverable, department, maker, due_date, done, sent_on, definition_of_done, receiver, accepted,
+         accepted_on, rework_returns, unclear_returns, last_return_reason) = record
+        bet = bet_names[rank]
+        if frappe.db.exists("Promise", {"bet": bet, "deliverable": deliverable}):
+            continue
+        receiver = users[DEMO_BETS[rank - 1]["owner"]] if receiver == "bet_owner" else users[receiver]
+        data = {
+            "doctype": "Promise",
+            "bet": bet,
+            "department": DEPARTMENT_MAP[department],
+            "maker": users[maker],
+            "receiver": receiver,
+            "deliverable": deliverable,
+            "due_date": _shifted_date(due_date, anchor_date),
+            "done": int(done),
+            "sent_for_acceptance_on": _shifted_date(sent_on, anchor_date) if sent_on else None,
+            "definition_of_done": definition_of_done,
+            "accepted": int(accepted),
+            "accepted_on": _shifted_date(accepted_on, anchor_date) if accepted_on else None,
+            "rework_returns": rework_returns,
+            "unclear_returns": unclear_returns,
+            "last_return_reason": last_return_reason,
+        }
+        frappe.get_doc(data).insert(ignore_permissions=True)
+
+
+def _load_demo_standing_numbers(users, anchor_date):
+    as_of = anchor_date
+    for department, metric_one, target_one, this_week_one, metric_two, target_two, this_week_two in DEPARTMENT_STANDING:
+        _insert_standing_number(DEPARTMENT_MAP[department], None, None, metric_one, target_one, this_week_one, as_of)
+        _insert_standing_number(DEPARTMENT_MAP[department], None, None, metric_two, target_two, this_week_two, as_of)
+    for person, department, role_title, metric_one, target_one, this_week_one, metric_two, target_two, this_week_two in PEOPLE_STANDING:
+        _insert_standing_number(DEPARTMENT_MAP[department], role_title, users[person], metric_one, target_one, this_week_one, as_of)
+        _insert_standing_number(DEPARTMENT_MAP[department], role_title, users[person], metric_two, target_two, this_week_two, as_of)
+
+
+def _load_demo_future_bets(users, bet_names, anchor_date):
+    for title, unlocked_by, score, earliest_start, owner, why_not_inside in DEMO_FUTURE_BETS:
+        if frappe.db.exists("Future Bet", {"title": title}):
+            continue
+        frappe.get_doc({
+            "doctype": "Future Bet",
+            "title": title,
+            "unlocked_by": bet_names.get(unlocked_by),
+            "score": score,
+            "earliest_start": _shifted_date(earliest_start, anchor_date),
+            "future_owner": users[owner],
+            "why_not_inside": why_not_inside,
+        }).insert(ignore_permissions=True)
+
+
+def _load_demo_parking_lot(users, anchor_date):
+    for idea, why_existed, owner, parked_on, revisit_by, still_wanted in PARKING_LOT:
+        if frappe.db.exists("Parking Lot Item", {"idea": idea}):
+            continue
+        frappe.get_doc({
+            "doctype": "Parking Lot Item",
+            "idea": idea,
+            "why_existed": why_existed,
+            "item_owner": users[owner],
+            "parked_on": _shifted_date(parked_on, anchor_date),
+            "revisit_by": _shifted_date(revisit_by, anchor_date),
+            "still_wanted": int(still_wanted),
+        }).insert(ignore_permissions=True)
+
+
+def _insert_standing_number(department, role_title, person, metric, target, this_week, as_of):
+    filters = {"department": department, "role_title": role_title, "person": person, "metric": metric}
+    if frappe.db.exists("Standing Number", filters):
+        return
+    frappe.get_doc({
+        "doctype": "Standing Number",
+        "department": department,
+        "role_title": role_title,
+        "person": person,
+        "metric": metric,
+        "target": target,
+        "this_week": this_week,
+        "as_of": as_of,
+        "on_target": int(target == this_week),
+    }).insert(ignore_permissions=True)
+
+
+def _demo_people():
+    people = {bet["owner"] for bet in DEMO_BETS}
+    people.update(bet["next_step_who"] for bet in DEMO_BETS)
+    people.update(record[3] for record in DEMO_PROMISES)
+    people.update(record[8] for record in DEMO_PROMISES if record[8] != "bet_owner")
+    people.update(record[4] for record in DEMO_FUTURE_BETS)
+    people.update(record[2] for record in PARKING_LOT)
+    people.update(record[0] for record in PEOPLE_STANDING)
+    people.update(outcome[5] for brief in DEMO_BRIEFS for outcome in brief["outcomes"])
+    return sorted(people)
+
+
+def _demo_email(person):
+    return "demo.{0}@dieture.invalid".format(frappe.scrub(person))
+
+
+def _shifted_date(source_date, anchor_date):
+    source_anchor = getdate("2026-09-17")
+    return add_days(anchor_date, date_diff(getdate(source_date), source_anchor))

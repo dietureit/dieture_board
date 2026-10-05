@@ -1,8 +1,8 @@
 # Production Board payload
 
-`production_board_v1.json` is generated from the reviewed production workbook
-and committed with the migration patch that imports it. Do not deploy a patch
-until its User Map and Department Map entries have been reviewed.
+Each `production_board_v*.json` snapshot is generated from a reviewed production
+workbook and committed with its migration patch. Do not deploy a patch until its
+User Map and Department Map entries have been reviewed.
 
 The workbook must provide:
 
@@ -17,6 +17,19 @@ Generate a payload from the bench root:
 python apps/dieture_board/tools/build_production_board_payload.py \
   /path/to/Dieture_Board.xlsx \
   apps/dieture_board/dieture_board/data/production_board_v1.json
+```
+
+If a reviewed workbook has no mapping sheets, reuse a previously reviewed
+payload's maps explicitly. A non-date Board target must be supplied as an
+explicit reviewed override; the builder rejects other incomplete Board rows.
+
+```bash
+python apps/dieture_board/tools/build_production_board_payload.py \
+  /path/to/Dieture_Board.xlsx \
+  apps/dieture_board/dieture_board/data/production_board_v2.json \
+  --version 2 \
+  --maps-from apps/dieture_board/dieture_board/data/production_board_v1.json \
+  --bet-by-when 4=2026-11-02
 ```
 
 Review the generated JSON, add the versioned patch module to `patches.txt`,

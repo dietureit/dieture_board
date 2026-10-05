@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """Build a reviewed Dieture Board JSON payload from the production workbook.
 
-The workbook must include these two mapping sheets before this tool is run:
+The workbook normally includes these two mapping sheets:
 
 * ``User Map``: ``Workbook label`` and ``ERP user email``
 * ``Department Map``: ``Workbook department`` and ``ERP Department name``
+
+For a reviewed workbook without those sheets, pass ``--maps-from`` with a
+previously reviewed payload.
 """
 
 import argparse
@@ -15,20 +18,34 @@ from pathlib import Path
 from openpyxl import load_workbook
 
 
+REQUIRED_BET_FIELDS = (
+	"short_name", "then_what", "number_today", "number_want", "unit", "by_when", "main_score",
+	"so_what", "what", "bet_owner_label", "colour",
+)
+BET_CONTENT_FIELDS = (
+	"short_name", "then_what", "number_today", "number_want", "unit", "so_what", "what",
+	"bet_owner_label", "next_step", "tiny_test",
+)
+
+
 def main():
 	arguments = _arguments()
-	payload = build_payload(Path(arguments.workbook))
+	payload = build_payload(
+		Path(arguments.workbook),
+		version=arguments.version,
+		map_payload_path=Path(arguments.maps_from) if arguments.maps_from else None,
+		bet_by_when_overrides=_date_overrides(arguments.bet_by_when),
+	)
 	Path(arguments.output).write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def build_payload(workbook_path):
+def build_payload(workbook_path, *, version=1, map_payload_path=None, bet_by_when_overrides=None):
 	workbook = load_workbook(workbook_path, read_only=True, data_only=True)
-	user_map = _read_map(workbook, "User Map", "Workbook label", "ERP user email")
-	department_map = _read_map(workbook, "Department Map", "Workbook department", "ERP Department name")
+	user_map, department_map = _maps(workbook, map_payload_path)
 
-	bets = _bets(workbook["Board"])
+	bets = _bets(workbook["Board"], bet_by_when_overrides or {})
 	payload = {
-		"version": 1,
+		"version": version,
 		"user_map": user_map,
 		"department_map": department_map,
 		"scorecards": _scorecards(workbook["Scorecard"]),
@@ -58,7 +75,7 @@ def _scorecards(sheet):
 	]
 
 
-def _bets(sheet):
+def _bets(sheet, by_when_overrides):
 	records = []
 	for row in _rows(sheet, 10):
 		if not isinstance(_value(row, 0), (int, float)):
@@ -77,8 +94,11 @@ def _bets(sheet):
 			"last_updated": _date(_value(row, 23)), "blocker": _text(_value(row, 26)),
 			"who_can_unblock": _text(_value(row, 27)), "doors_opened": _text(_value(row, 28)),
 		}
-		if _is_complete_bet(record):
-			records.append(record)
+		record["by_when"] = by_when_overrides.get(record["rank"], record["by_when"])
+		if _is_placeholder_bet(record):
+			continue
+		_validate_bet(record)
+		records.append(record)
 	return records
 
 
@@ -149,6 +169,23 @@ def _parking_lot(sheet):
 	} for row in _rows(sheet, 6) if _value(row, 0)]
 
 
+def _maps(workbook, map_payload_path):
+	map_sheets = {"User Map", "Department Map"}
+	if map_sheets.issubset(workbook.sheetnames):
+		return (
+			_read_map(workbook, "User Map", "Workbook label", "ERP user email"),
+			_read_map(workbook, "Department Map", "Workbook department", "ERP Department name"),
+		)
+	if not map_payload_path:
+		missing = ", ".join(sorted(map_sheets.difference(workbook.sheetnames)))
+		raise ValueError("Workbook is missing mapping sheets: {0}".format(missing))
+	with map_payload_path.open(encoding="utf-8") as map_file:
+		payload = json.load(map_file)
+	if not payload.get("user_map") or not payload.get("department_map"):
+		raise ValueError("Mapping payload needs user_map and department_map entries.")
+	return payload["user_map"], payload["department_map"]
+
+
 def _read_map(workbook, sheet_name, source_column, target_column):
 	if sheet_name not in workbook.sheetnames:
 		raise ValueError("Workbook needs a '{0}' sheet.".format(sheet_name))
@@ -211,18 +248,40 @@ def _score(value):
 	return None
 
 
-def _is_complete_bet(record):
-	required = (
-		"short_name", "then_what", "number_today", "number_want", "unit", "by_when", "main_score",
-		"so_what", "what", "bet_owner_label", "colour",
-	)
-	return all(record.get(field) for field in required)
+def _is_placeholder_bet(record):
+	return not any(record.get(field) for field in BET_CONTENT_FIELDS)
+
+
+def _validate_bet(record):
+	missing = [field for field in REQUIRED_BET_FIELDS if not record.get(field)]
+	if missing:
+		raise ValueError(
+			"Board rank {0} is incomplete: {1}".format(record["rank"], ", ".join(missing))
+		)
+
+
+def _date_overrides(values):
+	overrides = {}
+	for value in values:
+		try:
+			rank, by_when = value.split("=", 1)
+			rank = int(rank)
+		except ValueError as exc:
+			raise ValueError("--bet-by-when must use RANK=YYYY-MM-DD") from exc
+		parsed = _date(by_when)
+		if not parsed:
+			raise ValueError("--bet-by-when needs an ISO date: {0}".format(value))
+		overrides[rank] = parsed
+	return overrides
 
 
 def _arguments():
 	parser = argparse.ArgumentParser(description=__doc__)
 	parser.add_argument("workbook")
 	parser.add_argument("output")
+	parser.add_argument("--version", type=int, default=1)
+	parser.add_argument("--maps-from", help="JSON payload that provides reviewed User and Department maps")
+	parser.add_argument("--bet-by-when", action="append", default=[], metavar="RANK=YYYY-MM-DD")
 	return parser.parse_args()
 
 

@@ -1,1 +1,2 @@
 dieture_board.patches.v1_0.import_production_board
+dieture_board.patches.v1_1.import_production_board_v2
